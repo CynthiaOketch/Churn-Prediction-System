@@ -1,0 +1,34 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environment
+venv/
+.env/
+.venv/
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# Data and output files
+/data/*.csv
+!data/Telco-Customer-Churn.csv  # keep the original dataset only
+*.log
+*.tmp
+
+# VS Code settings
+.vscode/
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Streamlit or Flask artifacts
+.streamlit/
+instance/
+*.db
+
+# Jupyter runtime
+~$*.ipynb
+*.bak
