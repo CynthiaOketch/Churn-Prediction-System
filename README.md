@@ -18,16 +18,23 @@ This project is a machine learning solution designed to predict whether a teleco
 ## Project Structure
 
 ```bash
-churn-prediction/
-├── data/
-│ └── Telco-Customer-Churn.csv
-├── notebooks/
-│ └── 01_data_exploration.ipynb
-├── app/
-│ └── streamlit_app.py
-├── models/
-│ └── final_model.pkl
-├── README.md
+Churn-Prediction-System/
+├── app/ # Streamlit app files
+│ └── app.py
+├── data/ # Dataset and derived CSVs
+│ ├── Telco-Customer-Churn.csv
+│ ├── features.csv
+│ └── labels.csv
+├── models/ # Saved ML models
+│ └── random_forest_best.pkl
+├── notebooks/ # Jupyter notebooks
+│ ├── 01_data_exploration.ipynb
+│ ├── 02_model_training.ipynb
+│ ├── 03_model_testing.ipynb
+│ ├── 04_model_evaluation.ipynb
+│ └── 05_model_optimization.ipynb
+├── venv/ # Virtual environment
+└── README.md
 ```
 ---
 
@@ -48,3 +55,16 @@ churn-prediction/
    git clone https://github.com/CynthiaOketch/churn-prediction.git
    cd churn-prediction
    ```
+2. **Create a Virtual Environment**
+  bash```
+  python3 -m venv venv
+  source venv/bin/activate
+  ```
+3. **Install requirements**
+  bash```
+  ./setup.sh
+  ```
+4. **Run the app**
+  bash```
+  streamlit run app/app.py
+  ```
