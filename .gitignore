@@ -13,7 +13,8 @@ venv/
 
 # Data and output files
 /data/*.csv
-!data/Telco-Customer-Churn.csv  # keep the original dataset only
+!data/Telco-Customer-Churn.csv
+!data/features.csv
 *.log
 *.tmp
 
