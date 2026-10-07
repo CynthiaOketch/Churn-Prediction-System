@@ -17,20 +17,9 @@ source venv/bin/activate || { echo "❌ Failed to activate virtual environment";
 echo "Upgrading pip..."
 pip install --upgrade pip
 
-# 4. Install all necessary packages (development + notebooks)
-echo "📦 Installing development dependencies..."
-pip install \
-    jupyter \
-    notebook \
-    ipykernel \
-    pandas \
-    numpy \
-    matplotlib \
-    seaborn \
-    scikit-learn \
-    xgboost \
-    joblib \
-    streamlit
+# 4. Install pinned dependencies
+echo "📦 Installing dependencies from requirements.txt..."
+pip install -r requirements.txt
 
 # 5. Success message
 echo "✅ Setup complete!"
