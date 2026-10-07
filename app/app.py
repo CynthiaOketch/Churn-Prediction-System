@@ -6,9 +6,18 @@ import streamlit as st
 _DIR = os.path.dirname(os.path.abspath(__file__))
 pipeline = joblib.load(os.path.join(_DIR, '..', 'models', 'churn_pipeline.pkl'))
 
+_EXPECTED_COLS = {
+    'SeniorCitizen', 'tenure', 'MonthlyCharges', 'TotalCharges',
+    'gender', 'Partner', 'Dependents', 'PhoneService', 'MultipleLines',
+    'InternetService', 'OnlineSecurity', 'OnlineBackup', 'DeviceProtection',
+    'TechSupport', 'StreamingTV', 'StreamingMovies', 'Contract',
+    'PaperlessBilling', 'PaymentMethod',
+}
+
 st.title("Telco Churn Predictor")
 st.write("Enter customer details below to predict churn:")
 
+st.subheader("Account & Billing")
 gender = st.selectbox("Gender", ["Female", "Male"])
 senior = st.selectbox("Senior Citizen", ["No", "Yes"])
 partner = st.selectbox("Has Partner", ["No", "Yes"])
@@ -23,16 +32,27 @@ payment = st.selectbox("Payment Method", [
     "Bank transfer (automatic)", "Credit card (automatic)",
 ])
 
-# Service features — hardcoded defaults until issue #2 adds the widgets
-_phone_service = "Yes"
-_multiple_lines = "No"
-_internet_service = "Fiber optic"
-_online_security = "No"
-_online_backup = "No"
-_device_protection = "No"
-_tech_support = "No"
-_streaming_tv = "No"
-_streaming_movies = "No"
+st.subheader("Phone Service")
+phone_service = st.selectbox("Phone Service", ["Yes", "No"])
+if phone_service == "Yes":
+    multiple_lines = st.selectbox("Multiple Lines", ["Yes", "No"])
+else:
+    multiple_lines = "No phone service"
+    st.info("Multiple Lines: No phone service")
+
+st.subheader("Internet Service")
+internet_service = st.selectbox("Internet Service", ["Fiber optic", "DSL", "No"])
+if internet_service != "No":
+    online_security = st.selectbox("Online Security", ["Yes", "No"])
+    online_backup = st.selectbox("Online Backup", ["Yes", "No"])
+    device_protection = st.selectbox("Device Protection", ["Yes", "No"])
+    tech_support = st.selectbox("Tech Support", ["Yes", "No"])
+    streaming_tv = st.selectbox("Streaming TV", ["Yes", "No"])
+    streaming_movies = st.selectbox("Streaming Movies", ["Yes", "No"])
+else:
+    online_security = online_backup = device_protection = "No internet service"
+    tech_support = streaming_tv = streaming_movies = "No internet service"
+    st.info("Add-on services: No internet service")
 
 input_df = pd.DataFrame([{
     'SeniorCitizen':    1 if senior == "Yes" else 0,
@@ -42,19 +62,24 @@ input_df = pd.DataFrame([{
     'gender':           gender,
     'Partner':          partner,
     'Dependents':       dependents,
-    'PhoneService':     _phone_service,
-    'MultipleLines':    _multiple_lines,
-    'InternetService':  _internet_service,
-    'OnlineSecurity':   _online_security,
-    'OnlineBackup':     _online_backup,
-    'DeviceProtection': _device_protection,
-    'TechSupport':      _tech_support,
-    'StreamingTV':      _streaming_tv,
-    'StreamingMovies':  _streaming_movies,
+    'PhoneService':     phone_service,
+    'MultipleLines':    multiple_lines,
+    'InternetService':  internet_service,
+    'OnlineSecurity':   online_security,
+    'OnlineBackup':     online_backup,
+    'DeviceProtection': device_protection,
+    'TechSupport':      tech_support,
+    'StreamingTV':      streaming_tv,
+    'StreamingMovies':  streaming_movies,
     'Contract':         contract,
     'PaperlessBilling': paperless,
     'PaymentMethod':    payment,
 }])
+
+missing = _EXPECTED_COLS - set(input_df.columns)
+if missing:
+    st.error(f"Internal error — missing columns: {missing}")
+    st.stop()
 
 if st.button("Predict Churn"):
     prediction = pipeline.predict(input_df)[0]
