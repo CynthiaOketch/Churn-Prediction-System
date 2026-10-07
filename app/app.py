@@ -76,9 +76,10 @@ input_df = pd.DataFrame([{
     'PaymentMethod':    payment,
 }])
 
-assert set(input_df.columns) == _EXPECTED_COLS, (
-    f"Column mismatch: {set(input_df.columns) ^ _EXPECTED_COLS}"
-)
+missing = _EXPECTED_COLS - set(input_df.columns)
+if missing:
+    st.error(f"Internal error — missing columns: {missing}")
+    st.stop()
 
 if st.button("Predict Churn"):
     prediction = pipeline.predict(input_df)[0]
