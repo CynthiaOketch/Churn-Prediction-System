@@ -4,7 +4,6 @@ import pandas as pd
 import streamlit as st
 
 _DIR = os.path.dirname(os.path.abspath(__file__))
-pipeline = joblib.load(os.path.join(_DIR, '..', 'models', 'churn_pipeline.pkl'))
 
 _EXPECTED_COLS = {
     'SeniorCitizen', 'tenure', 'MonthlyCharges', 'TotalCharges',
@@ -13,6 +12,22 @@ _EXPECTED_COLS = {
     'TechSupport', 'StreamingTV', 'StreamingMovies', 'Contract',
     'PaperlessBilling', 'PaymentMethod',
 }
+
+
+@st.cache_resource
+def load_model():
+    model_path = os.path.join(_DIR, '..', 'models', 'churn_pipeline.pkl')
+    try:
+        return joblib.load(model_path)
+    except FileNotFoundError:
+        st.error(
+            f"Model artefact not found: `{os.path.normpath(model_path)}`. "
+            "Run the training notebook to generate it."
+        )
+        st.stop()
+
+
+pipeline = load_model()
 
 st.title("Telco Churn Predictor")
 st.write("Enter customer details below to predict churn:")
@@ -54,34 +69,34 @@ else:
     tech_support = streaming_tv = streaming_movies = "No internet service"
     st.info("Add-on services: No internet service")
 
-input_df = pd.DataFrame([{
-    'SeniorCitizen':    1 if senior == "Yes" else 0,
-    'tenure':           tenure,
-    'MonthlyCharges':   monthly,
-    'TotalCharges':     total,
-    'gender':           gender,
-    'Partner':          partner,
-    'Dependents':       dependents,
-    'PhoneService':     phone_service,
-    'MultipleLines':    multiple_lines,
-    'InternetService':  internet_service,
-    'OnlineSecurity':   online_security,
-    'OnlineBackup':     online_backup,
-    'DeviceProtection': device_protection,
-    'TechSupport':      tech_support,
-    'StreamingTV':      streaming_tv,
-    'StreamingMovies':  streaming_movies,
-    'Contract':         contract,
-    'PaperlessBilling': paperless,
-    'PaymentMethod':    payment,
-}])
-
-missing = _EXPECTED_COLS - set(input_df.columns)
-if missing:
-    st.error(f"Internal error — missing columns: {missing}")
-    st.stop()
-
 if st.button("Predict Churn"):
+    input_df = pd.DataFrame([{
+        'SeniorCitizen':    1 if senior == "Yes" else 0,
+        'tenure':           tenure,
+        'MonthlyCharges':   monthly,
+        'TotalCharges':     total,
+        'gender':           gender,
+        'Partner':          partner,
+        'Dependents':       dependents,
+        'PhoneService':     phone_service,
+        'MultipleLines':    multiple_lines,
+        'InternetService':  internet_service,
+        'OnlineSecurity':   online_security,
+        'OnlineBackup':     online_backup,
+        'DeviceProtection': device_protection,
+        'TechSupport':      tech_support,
+        'StreamingTV':      streaming_tv,
+        'StreamingMovies':  streaming_movies,
+        'Contract':         contract,
+        'PaperlessBilling': paperless,
+        'PaymentMethod':    payment,
+    }])
+
+    missing = _EXPECTED_COLS - set(input_df.columns)
+    if missing:
+        st.error(f"Internal error — missing columns: {missing}")
+        st.stop()
+
     prediction = pipeline.predict(input_df)[0]
     proba = pipeline.predict_proba(input_df)[0][1]
     st.subheader("Prediction Result:")
