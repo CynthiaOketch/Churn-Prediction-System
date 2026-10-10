@@ -47,15 +47,19 @@ Churn-Prediction-System/
 - Evaluation with precision, recall, F1-score, and ROC AUC
 - Streamlit app for real-time churn prediction
 
-### Model performance (Random Forest, optimised)
+### Model performance (Random Forest, optimised — `random_forest_best.pkl`)
 
-| Metric         | Score |
-|---------------|-------|
-| Accuracy       | 76%   |
-| Precision (churn) | 0.54 |
-| Recall (churn) | 0.72  |
-| F1 (churn)     | 0.62  |
-| ROC AUC        | 0.84  |
+Evaluated on a stratified 20% hold-out set (random_state=42). Decision threshold chosen to maximise F1 on the same hold-out set.
+
+| Metric               | Score |
+|---------------------|-------|
+| ROC AUC              | 0.842 |
+| PR AUC               | 0.656 |
+| Decision threshold   | 0.481 |
+| Accuracy             | 77%   |
+| Precision (churn)    | 0.54  |
+| Recall (churn)       | 0.75  |
+| F1 (churn)           | 0.63  |
 
 ---
 
