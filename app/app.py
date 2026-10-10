@@ -1,7 +1,9 @@
 import os
+
 import joblib
-import pandas as pd
 import streamlit as st
+
+from app.utils import _EXPECTED_COLS, build_input_frame
 
 _DIR = os.path.dirname(os.path.abspath(__file__))
 
@@ -12,14 +14,6 @@ _MAX_MONTHLY = 118.75
 _DEFAULT_MONTHLY = 70.35   # median
 _MAX_TOTAL = 8684.80
 _CONSISTENCY_TOLERANCE = 500.0  # dollars
-
-_EXPECTED_COLS = {
-    'SeniorCitizen', 'tenure', 'MonthlyCharges', 'TotalCharges',
-    'gender', 'Partner', 'Dependents', 'PhoneService', 'MultipleLines',
-    'InternetService', 'OnlineSecurity', 'OnlineBackup', 'DeviceProtection',
-    'TechSupport', 'StreamingTV', 'StreamingMovies', 'Contract',
-    'PaperlessBilling', 'PaymentMethod',
-}
 
 
 @st.cache_resource
@@ -100,27 +94,16 @@ elif tenure > 0:
         )
 
 if st.button("Predict Churn"):
-    input_df = pd.DataFrame([{
-        'SeniorCitizen':    1 if senior == "Yes" else 0,
-        'tenure':           tenure,
-        'MonthlyCharges':   monthly,
-        'TotalCharges':     total,
-        'gender':           gender,
-        'Partner':          partner,
-        'Dependents':       dependents,
-        'PhoneService':     phone_service,
-        'MultipleLines':    multiple_lines,
-        'InternetService':  internet_service,
-        'OnlineSecurity':   online_security,
-        'OnlineBackup':     online_backup,
-        'DeviceProtection': device_protection,
-        'TechSupport':      tech_support,
-        'StreamingTV':      streaming_tv,
-        'StreamingMovies':  streaming_movies,
-        'Contract':         contract,
-        'PaperlessBilling': paperless,
-        'PaymentMethod':    payment,
-    }])
+    input_df = build_input_frame(
+        gender=gender, senior=senior, partner=partner, dependents=dependents,
+        tenure=tenure, monthly=monthly, total=total,
+        contract=contract, paperless=paperless, payment=payment,
+        phone_service=phone_service, multiple_lines=multiple_lines,
+        internet_service=internet_service, online_security=online_security,
+        online_backup=online_backup, device_protection=device_protection,
+        tech_support=tech_support, streaming_tv=streaming_tv,
+        streaming_movies=streaming_movies,
+    )
 
     missing = _EXPECTED_COLS - set(input_df.columns)
     if missing:

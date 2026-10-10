@@ -5,6 +5,9 @@ __pycache__/
 
 # Virtual environment
 venv/
+
+# Claude Code internal directory
+.claude/
 .env/
 .venv/
 
