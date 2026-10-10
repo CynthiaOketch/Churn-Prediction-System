@@ -1,6 +1,6 @@
 # Churn Prediction System for Telecom Customers
 
-This project is a machine learning solution designed to predict whether a telecom customer will churn based on their demographics, service usage, and account information. It aims to help telecom companies proactively identify at-risk customers and improve retention strategies.
+A machine learning solution that predicts whether a telecom customer will churn based on their demographics, service usage, and account information. The goal is to help telecom companies proactively identify at-risk customers and improve retention strategies.
 
 ---
 
@@ -8,63 +8,79 @@ This project is a machine learning solution designed to predict whether a teleco
 
 - **Goal**: Predict customer churn using historical telecom data
 - **Dataset**: [Telco Customer Churn Dataset](https://www.kaggle.com/blastchar/telco-customer-churn)
-- **Tech Stack**:  
-  - Python (Pandas, NumPy, Matplotlib, Seaborn, Scikit-learn, XGBoost)  
-  - Jupyter Notebook for analysis and model building  
-  - Streamlit for interactive dashboard deployment
+- **Tech Stack**:
+  - Python (Pandas, NumPy, Matplotlib, Seaborn, Scikit-learn)
+  - Jupyter Notebook for analysis and model building
+  - Streamlit for interactive deployment
 
 ---
 
 ## Project Structure
 
-```bash
+```
 Churn-Prediction-System/
-├── app/ # Streamlit app files
-│ └── app.py
-├── data/ # Dataset and derived CSVs
-│ ├── Telco-Customer-Churn.csv
-│ ├── features.csv
-│ └── labels.csv
-├── models/ # Saved ML models
-│ └── random_forest_best.pkl
-├── notebooks/ # Jupyter notebooks
-│ ├── 01_data_exploration.ipynb
-│ ├── 02_model_training.ipynb
-│ ├── 03_model_testing.ipynb
-│ ├── 04_model_evaluation.ipynb
-│ └── 05_model_optimization.ipynb
-├── venv/ # Virtual environment
+├── app/
+│   └── app.py                        # Streamlit app
+├── data/
+│   ├── Telco-Customer-Churn.csv      # Raw dataset (download from Kaggle — not in repo)
+│   └── features.csv                  # Preprocessed features
+├── models/
+│   ├── churn_pipeline.pkl            # Deployed model (used by the app)
+│   └── random_forest_best.pkl        # Best model from GridSearchCV tuning
+├── notebooks/
+│   ├── 01_data_exploration.ipynb
+│   ├── 02_feature_engineering.ipynb
+│   ├── 03_model_training.ipynb
+│   ├── 04_model_evaluation.ipynb
+│   └── 05_model_optimization.ipynb
+├── setup.sh
 └── README.md
 ```
+
 ---
 
 ## Features
 
 - Exploratory Data Analysis (EDA) with visual insights
-- Feature engineering for better model performance
-- Model training using Logistic Regression, Random Forest, and XGBoost
+- Feature engineering: encoding, scaling, and corrected TotalCharges imputation
+- Model training with Random Forest and hyperparameter tuning via GridSearchCV
 - Evaluation with precision, recall, F1-score, and ROC AUC
 - Streamlit app for real-time churn prediction
 
+### Model performance (Random Forest, optimised)
+
+| Metric         | Score |
+|---------------|-------|
+| Accuracy       | 76%   |
+| Precision (churn) | 0.54 |
+| Recall (churn) | 0.72  |
+| F1 (churn)     | 0.62  |
+| ROC AUC        | 0.84  |
+
 ---
 
-##  How to Run
+## How to Run
 
 1. **Clone the repository**
+
    ```bash
-   git clone https://github.com/CynthiaOketch/churn-prediction.git
-   cd churn-prediction
+   git clone https://github.com/CynthiaOketch/Churn-Prediction-System.git
+   cd Churn-Prediction-System
    ```
-2. **Create a Virtual Environment**
-  bash```
-  python3 -m venv venv
-  source venv/bin/activate
-  ```
-3. **Install requirements**
-  bash```
-  ./setup.sh
-  ```
+
+2. **Download the dataset**
+
+   Download `Telco-Customer-Churn.csv` from [Kaggle](https://www.kaggle.com/blastchar/telco-customer-churn) and place it in the `data/` directory.
+
+3. **Set up the environment**
+
+   ```bash
+   ./setup.sh
+   source venv/bin/activate
+   ```
+
 4. **Run the app**
-  bash```
-  streamlit run app/app.py
-  ```
+
+   ```bash
+   streamlit run app/app.py
+   ```
