@@ -1,12 +1,13 @@
+import os
+
+import joblib
 import pandas as pd
-from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import StandardScaler, OneHotEncoder
 from sklearn.compose import ColumnTransformer
-from sklearn.pipeline import Pipeline
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score, roc_auc_score
-import joblib
-import os
+from sklearn.model_selection import train_test_split
+from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import OneHotEncoder, StandardScaler
 
 NUMERIC_COLS = ['SeniorCitizen', 'tenure', 'MonthlyCharges', 'TotalCharges']
 CATEGORICAL_COLS = [
